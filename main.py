@@ -1,10 +1,19 @@
 import requests
 import json
+
 from random import seed, randint
 from time import sleep
+
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+
 import TeleBot
+
+from rich.console import Console
+from rich.traceback import install
+
+install()
+console = Console(record=True)
 
 
 class worker:
@@ -39,6 +48,8 @@ class worker:
         self.api_key = '51201bea16768dcaccd8a5c90e6c7972'
         self.language = 'ru-RU'
 
+        self.bot = TeleBot.bot()
+
         chrome_options = webdriver.ChromeOptions()
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
         chrome_options.add_argument(f'user-agent={user_agent}')
@@ -58,8 +69,7 @@ class worker:
         sleep(10)
         self.browser.switch_to.window(active_windows[0])
 
-        bot = TeleBot.bot()
-        bot.send_require()
+        self.bot.send_require()
 
     def parse_info(self):
         seed(randint(0, 100))
@@ -102,6 +112,9 @@ if __name__ == '__main__':
         while True:
             w.parse_info()
             w.make_a_post()
-            sleep(18000)  # 8 hours
-    except Exception as ex:
-        print(ex)
+            sleep(18000)  # 6 hours
+    except:
+        console.print_exception()
+        console.save_html("error.html")
+        sleep(3)
+        w.bot.send_crash_message()
