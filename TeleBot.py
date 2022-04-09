@@ -30,9 +30,3 @@ class bot:
         self.bot.send_message(self.chat_id, data)
         with open("image_for_post.jpg", 'rb') as file:
             self.bot.send_document(self.chat_id, file)
-        with open("norm1.png", 'rb') as file:
-            self.bot.send_document(self.chat_id, file)
-        with open("norm2.png", 'rb') as file:
-            self.bot.send_document(self.chat_id, file)
-        with open("norm3.png", 'rb') as file:
-            self.bot.send_document(self.chat_id, file)
