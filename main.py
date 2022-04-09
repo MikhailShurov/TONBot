@@ -18,7 +18,7 @@ install()
 console = Console(record=True)
 
 
-class Worker():
+class Worker:
     def __init__(self):
         self.title = None
         self.genres = []
