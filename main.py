@@ -74,6 +74,7 @@ class Worker:
         buttons_group[1].click()
         sleep(10)
         self.browser.switch_to.window(active_windows[0])
+        self.browser.save_screenshot("norm.jpg")
         self.bot.send_require()
 
     def parse_info(self):
