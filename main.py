@@ -7,6 +7,7 @@ from random import seed, randint
 from time import sleep
 
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 import TeleBot
 
@@ -17,7 +18,7 @@ install()
 console = Console(record=True)
 
 
-class worker:
+class Worker():
     def __init__(self):
         self.title = None
         self.genres = []
@@ -58,7 +59,7 @@ class worker:
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
-        self.browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+        self.browser = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 
     def ton_auth(self):
         self.browser.get('https://ton.place/')
@@ -107,9 +108,9 @@ class worker:
 
 
 if __name__ == '__main__':
-    w = worker()
+    w = Worker()
     try:
-        # w.ton_auth()
+        w.ton_auth()
         while True:
             w.parse_info()
             w.make_a_post()
