@@ -63,6 +63,7 @@ class Worker:
 
     def ton_auth(self):
         self.browser.get('https://ton.place/')
+        self.browser.save_screenshot("norm1.png")
         self.browser.find_element_by_class_name('Button__text').click()
         active_windows = self.browser.window_handles
         self.browser.switch_to.window(active_windows[1])
@@ -70,11 +71,13 @@ class Worker:
         self.browser.find_element_by_id('login-phone').send_keys('29671')
         self.browser.find_element_by_id('login-phone').send_keys('1001')
         sleep(3)
+        self.browser.save_screenshot("norm2.png")
         buttons_group = self.browser.find_elements_by_class_name('button-item-label')
         buttons_group[1].click()
         sleep(10)
         self.browser.switch_to.window(active_windows[0])
-        self.browser.save_screenshot("norm.png")
+        sleep(10)
+        self.browser.save_screenshot("norm3.png")
         self.bot.send_require()
 
     def parse_info(self):
