@@ -1,3 +1,5 @@
+import os
+
 import requests
 import json
 
@@ -5,7 +7,6 @@ from random import seed, randint
 from time import sleep
 
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 
 import TeleBot
 
@@ -52,8 +53,12 @@ class worker:
 
         chrome_options = webdriver.ChromeOptions()
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-        chrome_options.add_argument(f'user-agent={user_agent}')
-        self.browser = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        chrome_options.add_argument(f"user-agent={user_agent}")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--no-sandbox")
+        self.browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
 
     def ton_auth(self):
         self.browser.get('https://ton.place/')
@@ -68,7 +73,7 @@ class worker:
         buttons_group[1].click()
         sleep(10)
         self.browser.switch_to.window(active_windows[0])
-
+        self.browser.save_screenshot("Lol.jpg")
         self.bot.send_require()
 
     def parse_info(self):
@@ -78,7 +83,7 @@ class worker:
         response = requests.get(f'https://api.themoviedb.org/3/discover/movie?api_key={self.api_key}&with_genres={selected_genre}&language={self.language}&page={randint(0, 101)}')
         response = json.loads(response.text)
 
-        selected_film = randint(0, 20)
+        selected_film = randint(0, 19)
         if response["results"][selected_film]["id"] in self.posted_ids:
             self.parse_info()
             return
@@ -97,18 +102,14 @@ class worker:
         with open('image_for_post.jpg', 'wb') as file:
             file.write(self.image)
 
-        print(self.title)
-        print(self.genres)
-        print(self.description)
-
     def make_a_post(self):
-        print('posted')
+        self.bot.send_information_to_make_a_post(self.title, self.genres, self.description)
 
 
 if __name__ == '__main__':
     w = worker()
     try:
-        w.ton_auth()
+        # w.ton_auth()
         while True:
             w.parse_info()
             w.make_a_post()
