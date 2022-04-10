@@ -1,5 +1,4 @@
 import telebot
-from time import sleep
 
 
 class bot:
@@ -18,13 +17,7 @@ class bot:
 
     def send_information_to_make_a_post(self, title, genres, description):
         self.bot.send_message(self.chat_id, "Данные для нового поста")
-        formatted_genres = ""
-        for i in range(len(genres)):
-            word = genres[i]
-            if i != 0:
-                word = str(genres[i]).lower()
-            formatted_genres += word
-            formatted_genres += ', '
+        formatted_genres = str(genres[0] + ', ') + ''.join(str(genres[i].lower() + ', ') for i in range(len(genres)) if i != 0)
         genres = formatted_genres[:-2]
         data = f'Название: {title}\n\nЖанры: {genres}\n\nОписание: {description}'
         self.bot.send_message(self.chat_id, data)
