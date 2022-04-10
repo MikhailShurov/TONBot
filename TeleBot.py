@@ -26,7 +26,7 @@ class bot:
             formatted_genres += word
             formatted_genres += ', '
         genres = formatted_genres[:-2]
-        data = f'{title}\nЖанр: {genres}\n\n{description}'
+        data = f'Название: {title}\n\nЖанры: {genres}\n\nОписание: {description}'
         self.bot.send_message(self.chat_id, data)
         with open("image_for_post.jpg", 'rb') as file:
             self.bot.send_document(self.chat_id, file)

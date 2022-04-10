@@ -102,10 +102,6 @@ class Worker:
         with open('image_for_post.jpg', 'wb') as file:
             file.write(self.image)
 
-        print(self.title)
-        print(self.genres)
-        print(self.description)
-
     def make_a_post(self):
         self.bot.send_information_to_make_a_post(self.title, self.genres, self.description)
 
