@@ -1,3 +1,4 @@
 image_for_post.jpg
 *.idea
 error.html
+__pycache__
