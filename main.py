@@ -1,13 +1,8 @@
-import os
-
 import requests
 import json
 
 from random import seed, randint
 from time import sleep
-
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 
 import TeleBot
 
@@ -52,30 +47,6 @@ class Worker:
 
         self.bot = TeleBot.bot()
 
-        chrome_options = webdriver.ChromeOptions()
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument(f"user-agent={user_agent}")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        self.browser = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
-
-    def ton_auth(self):
-        self.browser.get('https://ton.place/')
-        self.browser.find_element_by_class_name('Button__text').click()
-        active_windows = self.browser.window_handles
-        self.browser.switch_to.window(active_windows[1])
-        sleep(3)
-        self.browser.find_element_by_id('login-phone').send_keys('29671')
-        self.browser.find_element_by_id('login-phone').send_keys('1001')
-        sleep(3)
-        buttons_group = self.browser.find_elements_by_class_name('button-item-label')
-        buttons_group[1].click()
-        self.browser.switch_to.window(active_windows[0])
-        sleep(10)
-        self.bot.send_require()
-
     def parse_info(self):
         seed(randint(0, 100))
         selected_genre = self.movie_genres[randint(0, len(self.movie_genres) - 1)]
@@ -109,11 +80,10 @@ class Worker:
 if __name__ == '__main__':
     w = Worker()
     try:
-        # w.ton_auth()
         while True:
             w.parse_info()
             w.make_a_post()
-            sleep(18000)  # 6 hours
+            sleep(500)  # 6 hours
     except:
         console.print_exception()
         console.save_html("error.html")
